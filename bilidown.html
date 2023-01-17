@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bilibili-360P视频下载</title>
+    <style>
+        #tip{
+            max-width: 80%;
+            word-break: break-all;
+        }
+        #d_time{
+            display: block;
+        }
+        button{
+            margin: 10px 0;
+            padding: 3px 5px;
+        }
+        #get_title{
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>下载低质量Bilibili视频</h1>
+    <p>可以用于教学，拷贝进PPT</p>
+    <p>1.输入BV号</p>
+    <input type="text" placeholder="请输入要下载的视频的BV号" id="i" style="width: 250px;">
+    <p>2.如果您要下载的是一个分p视频，请输入您想下载视频的p序号，请填写整数，若不是分p视频请忽略此项</p>
+    <input type="text" placeholder="非必填-请输入要下载的视频的P号" id="i2" style="width: 250px;">
+    <button onclick="get_title()" id="get_title">获取</button>
+    <p id="tip"></p>
+    <div id="actions" style="display: none;">
+        <button id="jump">跳转</button>
+        <button id="down">下载</button>
+        <p id="video_down"></p>
+    </div>
+    <p>Designed By FANCC.</p>
+    <p>接口失效请联系fancc@565455.xyz</p>
+    <p>最新更新时间2022年12月30日。新增了分p下载功能。</p>
+</body>
+<script type="text/javascript">
+    // 跨域加载api
+    let api_response;
+    function load_script(url, f){
+        setTimeout(function(){
+            let s = document.createElement("script");
+            s.src = url;
+            document.querySelector("body").appendChild(s);
+            s.onload = function(){
+                s.remove();
+                f();
+            };
+        }, 0);
+    }
+    //
+    let l = "";
+    let p = "1";
+    let banchar = "?&/\\<>\'\"=";
+    let vdlink = "";
+    // 加载
+    function get_title(){
+        tip("加载中请稍后……请勿多次请求造成带宽浪费>_<");
+        l = document.querySelector("#i").value;
+        if (document.querySelector("#i2").value !== "") {
+            p = document.querySelector("#i2").value
+        }else{
+            p = "1";
+        }
+        l = cleanString(l);
+        p = cleanString(p);
+        load_script(
+            url = "https://api.565455.xyz/api/bilidown/?bv=" + l + "&p=" + p,
+            // url = "http://127.0.0.1:8888/?bv=" + l + "&p=" + p,
+            f = function(){
+                if (!api_response['code']){
+                    // 成功
+                    console.log(api_response['v_link']);
+                    vdlink = api_response['v_link']
+                    tip("视频地址是:"+api_response['v_link']);
+                    document.querySelector("#actions").style.display = "block";
+                }else{
+                    // 失败
+                    console.log(api_response['msg']);
+                    tip("失败:"+api_response['msg'])
+                }
+            }
+        );
+    }
+    // clean string
+    function cleanString(text){
+        for (let i=0;i<banchar.length;i++){
+            let rg = new RegExp(`\\${banchar[i]}`, 'g');
+            text = text.replace(rg, "");
+        }
+        return text;
+    }
+    // 提示
+    function tip(text){
+        document.querySelector("#tip").innerText = text;
+    }
+    // 视频下载
+    let d_time = 1;
+    function download(url,name){
+        // 进度相关
+        d_time = 1;
+        let itv;
+        const video_down_p = document.querySelector("#video_down");
+        video_down_p.innerText = "请求中，请耐心等待……";
+        //
+        fetch(url)
+        .then(res => {
+            // 进度相关
+            let v_len = Number(
+                res.headers.get("Content-Length") / 1024 / 1024
+                ).toFixed(2);
+            video_down_p.innerHTML = `正在下载视频文件，大小为${v_len}MB……
+            一般情况下下载该视频需要${Math.round(v_len*2.5)}秒
+            <span id='d_time'>00:00</span>`;
+            // console.log(res.headers.get("Content-Length"));
+            itv = setInterval(timer, 1000);
+            //
+            return res.blob();
+        })
+        .then(blob => {
+            const a = document.createElement("a");
+            const objectUrl = window.URL.createObjectURL(blob);
+            a.download = name;
+            a.href = objectUrl;
+            a.click();
+            window.URL.revokeObjectURL(objectUrl);
+            a.remove();
+            // 清除计时器
+            clearInterval(itv);
+            video_down_p.innerText = "下载已完成";
+        })
+    }
+    // 计时器
+    function timer(){
+        let d_t = document.querySelector("#d_time");
+        let d_min = Math.round(d_time / 60);
+        let d_sec = d_time % 60;
+        if(d_min < 10)d_min = "0"+String(d_min);
+        if(d_sec < 10)d_sec = "0"+String(d_sec);
+        d_t.innerText = `${d_min}:${d_sec}`;
+        d_time = d_time + 1;
+    }
+    // 按键绑定
+    document.querySelector("#jump").addEventListener("click", function(){
+        window.open(vdlink);
+    });
+    document.querySelector("#down").addEventListener("click", function(){
+        download(vdlink, l+'.mp4');
+    });
+</script>
+</html>

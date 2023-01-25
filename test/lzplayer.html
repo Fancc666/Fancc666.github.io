@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lanzou Video Player</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        video {
+            width: 100vw;;
+        }
+        #tip {
+            padding: 30px;
+        }
+    </style>
+</head>
+<body>
+    <p id="tip">加载中……</p>
+    <video id="v" controls></video>
+</body>
+<script type="text/javascript">
+    // 跨域加载api
+    let api_response;
+    function load_script(url, f){
+        setTimeout(function(){
+            let s = document.createElement("script");
+            s.src = url;
+            document.querySelector("body").appendChild(s);
+            s.onload = function(){
+                s.remove();
+                f();
+            };
+        }, 0);
+    }
+    //
+    // 加载
+    function get_title(){
+        if (!window.location.search) {
+            tip("invalid input");
+            document.getElementById("v").remove();
+            return;
+        };
+        load_script(
+            url = "https://api.565455.xyz/api/lanzou?lz="+window.location.search.slice(1),
+            f = function(){
+                if (!api_response['code']){
+                    // 成功
+                    console.log(api_response['link']);
+                    flink = api_response['link']
+                    document.querySelector("#tip").remove();
+                    document.getElementById("v").src = flink;
+                }else{
+                    // 失败
+                    console.log(api_response['msg']);
+                    tip("失败:"+api_response['msg'])
+                }
+            }
+        );
+    }
+    function tip(text){
+        document.querySelector("#tip").innerText = text;
+    }
+    get_title()
+</script>
+</html>

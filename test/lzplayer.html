@@ -10,7 +10,7 @@
             padding: 0;
         }
         video {
-            width: 100vw;;
+            width: 100%;
         }
         #tip {
             padding: 30px;
@@ -55,7 +55,8 @@
                 }else{
                     // 失败
                     console.log(api_response['msg']);
-                    tip("失败:"+api_response['msg'])
+                    tip("失败:"+api_response['msg']);
+                    document.getElementById("v").remove();
                 }
             }
         );

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lanzou-Player-FANCC</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        .video-js {
+        /* The base font size controls the size of everything, not just text.
+            All dimensions use em-based sizes so that the scale along with the font size.
+            Try increasing it to 15px and see what happens. */
+        font-size: 10px;
+        /* The main font color changes the ICON COLORS as well as the text */
+        color: rgb(75, 123, 145)!important;
+        }
+    </style>
+    <link href="https://vjs.zencdn.net/7.21.1/video-js.css" rel="stylesheet" />
+    <!-- <link href="https://unpkg.com/@videojs/themes@1/dist/fantasy/index.css" rel="stylesheet"> -->
+    <link href="https://unpkg.com/@videojs/themes@1/dist/sea/index.css" rel="stylesheet">
+    <!-- Video.js base CSS -->
+</head>
+<body>
+<div class="container">
+    <video
+    id="my-video"
+    class="video-js vjs-theme-sea"
+    controls
+    preload="auto"
+    data-setup="{}"
+  >
+    <source src="#" type="video/mp4" id="my-source" />
+    <p class="vjs-no-js">
+      To view this video please enable JavaScript, and consider upgrading to a
+      web browser that
+      <a href="https://videojs.com/html5-video-support/" target="_blank"
+        >supports HTML5 video</a
+      >
+    </p>
+  </video>
+  <p id="tip">加载中...</p>
+  <p>
+    <span>Lanzou-Player</span>
+    <span>Powered by FANCC.</span>
+    <a href="#" id="link" target="_blank">去蓝奏云下载</a>
+  </p>
+  <!-- <script src="https://vjs.zencdn.net/7.21.1/video.min.js"></script> -->
+</div>
+</body>
+<script type="text/javascript">
+    // script
+    let vidjs_script = document.createElement("script");
+    vidjs_script.src = "https://vjs.zencdn.net/7.21.1/video.min.js";
+    let tip = document.getElementById("tip");
+    let link = document.getElementById("link");
+    let source = document.getElementById("my-source");
+    let video = document.getElementsByTagName("video")[0];
+    let window_width = window.innerWidth;
+    video.width = window_width;
+    //
+    let api_response;
+    function load_script(url, f){
+        setTimeout(function(){
+            let s = document.createElement("script");
+            s.src = url;
+            document.querySelector("body").appendChild(s);
+            s.onload = function(){
+                s.remove();
+                f();
+            };
+        }, 0);
+    }
+    /**
+     * @return {string}
+     */
+     function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = decodeURI(window.location.search.substr(1)).match(reg);
+        if (r != null)return unescape(r[2]);
+        else return "null";
+    }
+    function load_videoJS(){
+        document.getElementsByTagName("body")[0].appendChild(vidjs_script);
+    }
+    let lz_link = location.search.slice(1);
+    // load_videoJS();
+    if (lz_link === ""){
+        video.remove();
+        tip.innerText = "没有检测到输入的参数。视频无法播放。"
+        link.remove();
+    }else{
+        load_script(
+            url = "https://api.565455.xyz/api/lanzou?lz="+lz_link,
+            f = function(){
+                if (!api_response['code']){
+                    // 成功
+                    console.log(api_response['link']);
+                    vdlink = api_response['link']
+                    source.src = vdlink;
+                    tip.remove();
+                    link.href = lz_link;
+                    load_videoJS();
+                }else{
+                    // 失败
+                    console.log(api_response['msg']);
+                    tip.innerText = "失败:"+api_response['msg'];
+                    video.remove();
+                    link.remove();
+                }
+            }
+        );
+    }
+</script>
+</html>

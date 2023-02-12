@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>天津电视台教育频道-FANCC</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .container{
+            padding: 10px;
+            text-align: center;
+        }
+        video{
+            width: 100%;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+        h2{
+            padding: 20px 0;
+        }
+        .container p{
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>天津电视台教育频道</h2>
+    <video id="video" autoplay controls></video>
+    <p>请手动开始播放</p>
+    <p>来源：天津电视台</p>
+    <p>By FANCC</p>
+</div>
+</body>
+<script type="text/javascript">
+    // script
+    var Hls = window.Hls;
+    var url = 'http://live-bd.wisetv.com.cn/TJIPTV/TJKJ.m3u8?_bd_session_id=98f671a8f3f861824a1676c90e094386&GUID=1035cdc2347576def6f0322c80310474&timestamp=1676192362&secret=de0bdf6f81e07d528c74ee533b8814aa';
+    if (Hls.isSupported()) {
+        var hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function(){
+            // video.play();
+        });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = url;
+        video.addEventListener('canplay', function(){
+            // video.play();
+        });
+    }
+</script>
+</html>

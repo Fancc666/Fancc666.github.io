@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>优点英语密码提取工具</title>
+    <style>
+        #tip{
+            max-width: 80%;
+            word-break: break-all;
+        }
+        #d_time{
+            display: block;
+        }
+        button{
+            margin: 10px 0;
+            padding: 3px 5px;
+        }
+        #get_title{
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>提取优点英语听力密码</h1>
+    <p>使用教程：请在优点英语听力需要输入密码的页面（你需要扫描两次二维码）点击右上角三个点复制链接到下方输入框</p>
+    <input type="text" placeholder="请输入链接" id="i" style="width: 250px;">
+    <button onclick="get_title()" id="get_title">获取</button>
+    <p id="tip"></p>
+    <p>Designed By FANCC.</p>
+    <p>接口失效请联系fancc@565455.xyz</p>
+    <p>最新更新时间2023年2月17日。</p>
+</body>
+<script type="text/javascript">
+    // 跨域加载api
+    let api_response;
+    function load_script(url, f){
+        setTimeout(function(){
+            let s = document.createElement("script");
+            s.src = url;
+            document.querySelector("body").appendChild(s);
+            s.onload = function(){
+                s.remove();
+                f();
+            };
+        }, 0);
+    }
+    //
+    let l = "";
+    let mm = "";
+    let r = /=(.*?)&/;
+    // 加载
+    function get_title(){
+        tip("加载中请稍后……请勿多次请求造成带宽浪费>_<");
+        l = document.querySelector("#i").value;
+        l = decodeURIComponent(l);
+        l = l.match(r)[1];
+        load_script(
+            url = "https://api.565455.xyz/api/youdian/?route=" + l,
+            f = function(){
+                if (!api_response['code']){
+                    // 成功
+                    console.log(api_response['mima']);
+                    vdlink = api_response['mima']
+                    tip("密码是:"+api_response['mima']);
+                }else{
+                    // 失败
+                    console.log(api_response['msg']);
+                    tip("失败:"+api_response['msg'])
+                }
+            }
+        );
+    }
+    // 提示
+    function tip(text){
+        document.querySelector("#tip").innerText = text;
+    }
+</script>
+</html>

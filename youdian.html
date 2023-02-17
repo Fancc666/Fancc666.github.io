@@ -29,7 +29,7 @@
     <p id="tip"></p>
     <p>Designed By FANCC.</p>
     <p>接口失效请联系fancc@565455.xyz</p>
-    <p>最新更新时间2023年2月17日。</p>
+    <p>最新更新时间2023年2月17日。解决了空值bug。</p>
 </body>
 <script type="text/javascript">
     // 跨域加载api
@@ -53,8 +53,17 @@
     function get_title(){
         tip("加载中请稍后……请勿多次请求造成带宽浪费>_<");
         l = document.querySelector("#i").value;
+        if (l === "") {
+            tip("错误：您还未输入链接");
+            return;
+        }
         l = decodeURIComponent(l);
-        l = l.match(r)[1];
+        l = l.match(r);
+        if (!l){
+            tip("错误：链接格式错误");
+            return;
+        }
+        l = l[1];
         load_script(
             url = "https://api.565455.xyz/api/youdian/?route=" + l,
             f = function(){

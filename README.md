@@ -1,5 +1,13 @@
-# Fancc666.github.io
+# 这里是FANCC的Github仓库
 
-# CNAME->g.565455.xyz
+## 在线预览
 
-**Home page is at ./blog**
+<https://Fancc666.github.io>
+
+<https://g.565455.xyz>
+
+## 功能
+
+博客：<https://g.565455.xyz/blog>
+
+其他待续。

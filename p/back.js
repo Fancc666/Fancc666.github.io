@@ -32,6 +32,9 @@ function load_script(url, f){
     }, 0);
 }
 
+// consts
+const DEFAULT_TITLE = document.getElementById("qtitle").value;
+
 // hide if img loaded error
 let head_img = document.getElementsByClassName("back-img")[0].children[0];
 let warn = document.getElementById("warn");
@@ -48,25 +51,30 @@ window.onload = function (){
 }
 
 // warn and its mask
-function show_warn(i){
-    document.getElementById("wcontent").innerHTML = i;
-    document.getElementById("mask").classList.remove("hide");
-    // console.log(window.scrollY);
-    // document.getElementById("mask").style.top = String(window.scrollY);
-    document.documentElement.style.overflow = "hidden";
-}
-function hide_warn(){
-    document.getElementById("mask").classList.add("hide");
-    document.documentElement.style.overflow = "auto";
-}
-document.getElementById("mask").addEventListener("click", hide_warn);
+// function show_warn(i){
+//     document.getElementById("wcontent").innerHTML = i;
+//     document.getElementById("mask").classList.remove("hide");
+//     // console.log(window.scrollY);
+//     // document.getElementById("mask").style.top = String(window.scrollY);
+//     document.documentElement.style.overflow = "hidden";
+// }
+// function hide_warn(){
+//     document.getElementById("mask").classList.add("hide");
+//     document.documentElement.style.overflow = "auto";
+// }
+// document.getElementById("mask").addEventListener("click", hide_warn);
 
 // button and jump to the url
 document.getElementById("go").addEventListener("click", function (){
     let link = document.getElementById("dlink").value;// the link
     // let ji = document.getElementById("dji").value;// season
     // let qi = document.getElementById("dqi").value;// episode
-    // let qtitle = document.getElementById("qtitle").value;// qtitle
+    let qtitle = document.getElementById("qtitle").value;// qtitle
+    let use_qtitle = false;
+    if (qtitle !== DEFAULT_TITLE) {
+        // 
+        use_qtitle = true;
+    }
     // if (link && (qtitle || (ji && qi))){
     //     if (ji && qi){
     //         window.open(`https://fancc666.gitee.io/say/dxx/index.html?t=${ji},${qi}&l=${link}`);
@@ -79,23 +87,26 @@ document.getElementById("go").addEventListener("click", function (){
 
     // 2023 code
     warn.innerHTML = "加载中，请稍后";
-    load_script(
-        url = "https://api.565455.xyz/api/title/?link=" + link,
-        // url = "http://127.0.0.1:8888/?bv=" + l + "&p=" + p,
-        f = function(){
-            if (!api_response['code']){
-                // 成功
-                console.log(api_response['title']);
-                window.open(`https://fancc666.gitee.io/say/dxx/index.html?l=${link}&qtitle=${api_response['title']}`);
-                warn.innerHTML = "";
-                //
-            }else{
-                // 失败
-                console.log(api_response['msg']);
-                warn.innerHTML = "失败:"+api_response['msg'];
+    if (use_qtitle){
+        window.open(`https://fancc666.gitee.io/say/dxx/index.html?l=${link}&qtitle=${qtitle}`);
+    }else{
+        load_script(
+            url = "https://api.565455.xyz/api/title/?link=" + link,
+            f = function(){
+                if (!api_response['code']){
+                    // 成功
+                    console.log(api_response['title']);
+                    window.open(`https://fancc666.gitee.io/say/dxx/index.html?l=${link}&qtitle=${api_response['title']}`);
+                    warn.innerHTML = "";
+                    //
+                }else{
+                    // 失败
+                    console.log(api_response['msg']);
+                    warn.innerHTML = "失败:"+api_response['msg'];
+                }
             }
-        }
-    );
+        );
+    }
 });
 
 // theme

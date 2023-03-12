@@ -26,7 +26,7 @@ function load_script(url, f){
         };
         s.onerror = function(){
             s.remove();
-            api_response={"code": 0, "msg": "网络错误"};
+            api_response={"code": 1, "msg": "网络错误"};
             f();
         }
     }, 0);

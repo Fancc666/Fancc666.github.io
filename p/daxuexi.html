@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="青年大学习截屏工具">
+    <title>青年大学习截屏工具-FANCC</title>
+    <link rel="stylesheet" href="https://fancc666.gitee.io/daxuexi/daxuexi.css">
+</head>
+<body>
+<div class="back-img">
+    <img src="https://api.ixiaowai.cn/mcapi/mcapi.php" alt="">
+</div>
+<div class="mask hide" id="mask" style="top: 0">
+    <div style="padding: .2rem .3rem;max-height: 40%;max-width: 80%;background-color: white;text-align: center;overflow: hidden;color: black">
+        <p style="padding-top: 1rem"><b style="font-size: 1rem">提示</b></p>
+        <p id="wcontent" style="font-size: .8rem;padding: 1rem 0;word-break: break-all;margin: 0 .3rem"></p>
+    </div>
+</div>
+<div class="container">
+    <h1>青年大学习结束页转跳工具-Gihub移植版</h1>
+    <div>
+        <p>
+            <a href="https://fancc666.gitee.io/daxuexi/">原Gitee链接</a>
+        </p>
+        <p><b>简介</b></p>
+        <p>本工具可以直接跳转至青年大学习结束页以便截图</p>
+        <p><b>使用须知</b></p>
+        <p>青年大学习学习记录机制是<mark>点进链接就算完成学习</mark>，所以我们需要做的就是在微信中点进大学习链接，点右上角三个点，复制链接，在本网页粘贴，跳转至结束页截图。
+            <span style="display: block;font-size: inherit" class="red">使用工具请划至页面底部</span>
+        </p>
+        <p><b>免责声明</b></p>
+        <p>工具仅供学习交流使用，切勿用作商业用途</p>
+        <p>本工具不会收集任何个人信息</p>
+    </div>
+    <div class="pad">
+        <p>开始使用工具！！</p>
+        <div class="pad">
+            <div>
+                <p>请输入大学习链接</p>
+                <label>
+                    <input type="text" id="dlink" placeholder="https://***">
+                </label>
+            </div>
+            <div>
+                <!-- <p>请输入季数和期数</p>
+                <label>
+                    <input type="text" id="dji" placeholder="季数-填写阿拉伯数字">
+                </label>
+                <label>
+                    <input type="text" id="dqi" placeholder="期数-填写阿拉伯数字">
+                </label> -->
+                <p>自定义标题(给开发人员准备，<mark>非必填</mark>)</p>
+                <label>
+                    <input type="text" id="qtitle" placeholder="自定义标题" value="“青年大学习”xxxx年第x期">
+                </label>
+                <!-- <p style="font-size: .55em;color: gray;margin: 0;position: relative;top: -5px">*仅在不填写季数期数时生效</p> -->
+            </div>
+            <div>
+                <p><span class="btn" id="go">前往</span></p>
+            </div>
+        </div>
+        <p id="warn"></p>
+    </div>
+    <div>
+        <p>没有现成的链接？</p>
+        <p>试试这组数据！</p>
+        <p>链接https://h5.cyol.com/special/daxuexi/byw1m1kn1s/index.html</p>
+        <!-- <p>季数12</p>
+        <p>期数6</p> -->
+    </div>
+    <div style="text-align: center">
+        <p>By FANCC</p>
+        <p>2022.01.13/2023.03.12</p>
+    </div>
+    <!-- <div class="pad" style="display: none">
+        <p style="color: cadetblue;text-align: center">
+            <span style="font-size: inherit;text-decoration: underline;cursor: pointer" id="theme_a">[开启深色背景]</span>
+            <span style="font-size: inherit;text-decoration: underline;cursor: pointer" id="theme_b">[开启浅色背景]</span>
+        </p>
+    </div> -->
+</div>
+<div class="pad"></div>
+</body>
+<script src="back.js"></script>
+</html>

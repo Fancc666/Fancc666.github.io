@@ -1,0 +1,103 @@
+:root{
+    font-size: 18px;
+}
+*{
+    margin: 0;
+    padding: 0;
+}
+.container{
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    height: 100vh;
+    background-color: rgba(255, 240, 180, 0.843);
+    position: relative;
+}
+.page{
+    display: none;
+    height: 100vh;
+    width: 80%;
+    margin: 0 auto;
+    overflow: hidden;
+    flex-direction: column;
+    word-break: break-all;
+}
+.page p{
+    line-height: 2em;
+}
+.active{
+    display: flex;
+}
+h2{
+    margin: 20px auto !important;
+    padding-top: 10px;
+}
+button{
+    background-color: rgb(163, 255, 127);
+    padding: 5px 10px;
+    font-size: .9em;
+    border: 1px solid white;
+    border-radius: 10px;
+    width: 120px;
+    margin: 0 !important;
+}
+button:active{
+    background-color: rgb(164, 164, 164);
+    color: white;
+}
+.block{
+    margin: 30% 0;
+}
+.at_bottom{
+    position: absolute;
+    bottom: 40px;
+    left: calc(50% - 60px);
+}
+.at_bottom_up{
+    position: absolute;
+    bottom: 80px;
+    left: calc(50% - 60px);
+}
+.game{
+    text-align: center;
+}
+.game > *{
+    margin: 8px 0;
+}
+.floor{
+    height: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.floor *{
+    display: inline-block;
+}
+.floor span{
+    word-break: keep-all;
+    letter-spacing: .5em;
+}
+.colorbar{
+    margin-left: 45px;
+    height: 75%;
+    width: 300px;
+}
+.color0{
+    background-color: yellow;
+}
+.color1{
+    background-color: blue;
+}
+.color2{
+    background-color: green;
+}
+.color3{
+    background-color: red;
+}
+.big{
+    font-size: 1.1em;
+}
+.line{
+    text-decoration: underline;
+}

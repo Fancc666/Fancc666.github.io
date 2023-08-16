@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./game.css?v2">
+    <link rel="stylesheet" href="./game.css?v3">
     <title>魔塔-FANCC</title>
     <script>
         // https转http
@@ -16,27 +16,34 @@
 <div class="container">
     <div class="page active" id="welcome">
         <h2>益智小游戏-魔塔</h2>
-        <p><b class="big">游戏介绍</b></p>
-        <p>魔塔有很多层，每层都有四种颜色</p>
-        <p>初始状态下，颜色可能是混乱的，你需要把他们调回全是<b class="line">黄色</b></p>
-        <p>点击每层魔塔时，除了自身的变化，<b class="line">也许会带动别的层数转动</b></p>
-        <p>你需要慢慢<b class="line">总结规律</b>，摸索诀窍</p>
-        <p>多试几次就会了，要有耐心，祝你玩得开心</p>
-        <p class="line" id="reset">点我重置进度</p>
-        <p>最新更新时间2023.8.16 新增无限模式，debug无解bug</p>
-        <p>By FANCC, 2023.</p>
+        <div id="instruct">
+            <p><b class="big">游戏介绍</b></p>
+            <p>本介绍可上下滑动观看</p>
+            <p>魔塔每层都有四种颜色，初始状态下，颜色可能是混乱的，你需要把他们调回全是<b class="line">黄色</b></p>
+            <p>点击每层魔塔时，除了自身的变化，<b class="line">也许会带动别的层数转动</b></p>
+            <p>你需要慢慢<b class="line">总结规律</b>，摸索诀窍</p>
+            <p>多试几次就会了，要有耐心，祝你玩得开心</p>
+            <p><span class="line" id="reset">点我重置进度</span></p>
+            <p>最新更新时间2023.8.16 新增无限模式，debug无解bug</p>
+            <p>By FANCC, 2023.</p>
+        </div>
         <button class="at_bottom_up" id="startGame">开始游戏</button>
         <button class="at_bottom" id="load">加载进度</button>
     </div>
     <div class="page select" id="select">
+        <p class="fh">返回</p>
         <h2>选关界面</h2>
         <button class="w100 m10" id="x1">传统模式(10关)</button>
         <button class="w100 m10" id="x2">无限模式(随机种子)</button>
         <button class="w100 m10" id="x3">seed测试</button>
         <p>*无限模式不支持加载进度</p>
+        <p>*随机种子范围100000-999999</p>
+        <p>联系反馈:</p>
+        <p>- 邮箱fancc@565455.xyz</p>
+        <p>- 反馈页https://support.qq.com/products/424186/</p>
     </div>
     <div class="page game" id="game">
-        <p id="fh">返回</p>
+        <p class="fh">返回</p>
         <h2 id="gameTitle"></h2>
         <p id="gameSeed">seed:<span id="gameSeedNum"></span></p>
         <div class="tower">
@@ -61,6 +68,6 @@
         <button class="at_bottom" id="next">下一关</button>
     </div>
 </div>
-<script src="./game.js?v4" type="module"></script>
+<script src="./game.js?v5" type="module"></script>
 </body>
 </html>

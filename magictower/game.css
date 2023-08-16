@@ -114,7 +114,7 @@ button:active{
     padding: 0;
     line-height: 0;
 }
-#fh{
+.fh{
     margin: 0;
     padding: 0;
     line-height: 0;
@@ -123,4 +123,14 @@ button:active{
     font-size: .9em;
     color: blue;
     text-decoration: underline;
+}
+.fh, #reset{
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+}
+#instruct{
+    max-height: 66%;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }

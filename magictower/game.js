@@ -177,7 +177,8 @@ game.start_game_wx = ()=>{
 }
 game.start_game_seed = ()=>{
     let user_input = prompt("请输入随机种子");
-    if (user_input === ""){
+    let rej = ['', '0', null, 0, NaN];
+    if (rej.includes(user_input) || rej.includes(Number(user_input)) || Number(user_input)<100000 || Number(user_input)>999999){
         return;
     }
     game.gameSeed = Number(user_input);
@@ -365,7 +366,7 @@ function clearProcess(){
 }
 
 game.get_item("#startGame").addEventListener("click", game.to_select_page);
-game.get_item("#fh").addEventListener("click", ()=>window.location.reload());
+document.querySelectorAll(".fh").forEach((e)=>{e.addEventListener("click", ()=>window.location.reload())});
 game.get_item("#x1").addEventListener("click", game.start_game);
 game.get_item("#x2").addEventListener("click", game.start_game_wx);
 game.get_item("#x3").addEventListener("click", game.start_game_seed);
@@ -375,4 +376,3 @@ game.get_item("#reset").addEventListener("click", clearProcess);
 
 // inject
 window.game = game;
-window.Matrix = Matrix;

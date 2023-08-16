@@ -197,17 +197,25 @@ game.generate_wx_game = ()=>{
     randomSeed.seed = game.gameSeed;
     // console.log(randomSeed.generate());
     let i_color = [];
-    for (let i=0;i<size;i++){
-        i_color.push(randomSeed.choose(0, 3, randomSeed.generate));
+    let flag1 = 0;
+    while (flag1 === 0){
+        flag1 = 0;
+        i_color = [];
+        for (let i=0;i<size;i++){
+            let t = randomSeed.choose(0, 3, randomSeed.generate);
+            flag1 += t;
+            i_color.push(t);
+        }
     }
+    
     let i_rule = [
         [1, 0, 0, 0],
         [0, 1, 0, 0],
         [0, 0, 1, 0],
         [0, 0, 0, 1]
     ];
-    let flag = 0;
-    while (!flag){
+    let flag2 = 0;
+    while (flag2 !== 1 && flag2 !== -1){
         for (let i=0;i<size;i++){
             for (let j=0;j<size;j++){
                 if (i === j){
@@ -216,7 +224,7 @@ game.generate_wx_game = ()=>{
                 i_rule[i][j] = randomSeed.choose(0, 1, randomSeed.generate);
             }
         }
-        flag = Matrix.det(i_rule);
+        flag2 = Matrix.det(i_rule);
     }
     game.data['WX'].initColor = i_color;
     game.data['WX'].rule = i_rule;
@@ -367,3 +375,4 @@ game.get_item("#reset").addEventListener("click", clearProcess);
 
 // inject
 window.game = game;
+window.Matrix = Matrix;

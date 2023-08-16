@@ -3,6 +3,10 @@
  * 2023.8.14
  * magic tower engine
  */
+import { randomSeed } from "./randomSeed.js";
+import { Matrix } from "./matrix.js";
+import { reporter } from "./reporter.js";
+
 var game = game || {};
 game.item = null;
 game.colorBars = [];
@@ -217,6 +221,13 @@ if (game.debugMode){
     game.gameID = debugLevel;
     game.start_game();
 }
+game.debugger = (e)=>{
+    if (game.debugMode){
+        return eval("("+e+")");
+    }
+};
+
+window.game = game;
 
 function clearProcess(){
     localStorage.removeItem("game_process");
@@ -226,3 +237,4 @@ function clearProcess(){
 game.get_item("#startGame").addEventListener("click", game.start_game);
 game.get_item("#load").addEventListener("click", game.load_process);
 game.get_item("#next").addEventListener("click", game.checkNext);
+game.get_item("#reset").addEventListener("click", clearProcess);

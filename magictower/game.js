@@ -10,6 +10,7 @@ import { reporter } from "./reporter.js";
 const NORMAL = 0;
 const WX = 1;
 const SEED = 2;
+const TOOL = 3;
 
 var game = game || {};
 game.item = null;
@@ -149,6 +150,7 @@ game.next = ()=>{
         }
     }
 }
+
 game.to_select_page = ()=>{
     game.hide_page("#welcome");
     game.hide_page("#game");
@@ -193,6 +195,30 @@ game.start_game_seed = ()=>{
     game.get_item("#next").style.display = "none";
     game.init_all_seed();
 }
+game.start_game_help = ()=>{
+    game.hide_page("#welcome");
+    game.hide_page("#select");
+    game.hide_page("#game");
+    game.show_page("#help");
+    game.gameMode = TOOL;
+}
+game.helper = ()=>{
+    let user_input = prompt("请输入随机种子");
+    let rej = ['', '0', null, 0, NaN];
+    if (rej.includes(user_input) || rej.includes(Number(user_input)) || Number(user_input)<100000 || Number(user_input)>999999){
+        return;
+    }
+    game.gameSeed = Number(user_input);
+    game.generate_wx_game();
+    let res = game.solver(game.data['WX'].initColor, game.data['WX'].rule);
+    game.get_item("#solve_output").innerText = `
+    第1层点${res[0]}下
+    第2层点${res[1]}下
+    第3层点${res[2]}下
+    第4层点${res[3]}下
+    `;
+}
+
 game.generate_wx_game = ()=>{
     let size = 4;
     randomSeed.seed = game.gameSeed;
@@ -229,6 +255,25 @@ game.generate_wx_game = ()=>{
     }
     game.data['WX'].initColor = i_color;
     game.data['WX'].rule = i_rule;
+}
+game.all_game_solve = (start_num=100000)=>{
+    for (let i=start_num;i<=999999;i++){
+        game.gameSeed = i;
+        game.generate_wx_game();
+        console.log(i, game.solver(game.data['WX'].initColor, game.data['WX'].rule));
+    }
+}
+game.solver = (init_color, init_rule)=>{
+    return Matrix.multiply([init_color.map(e=>-1*e)], Matrix.inv(init_rule))[0]
+    .map(e=>{
+        if (e >= 4){
+            return e%4;
+        }
+        if (e < 0){
+            return (e+Math.floor((4-(e))/4)*4)%4;
+        }
+        return e;
+    });
 }
 game.load_process = ()=>{
     if (localStorage.getItem("game_process") === null){
@@ -344,7 +389,7 @@ game.data = {
     'WX': {
         initColor: null,
         rule: null,
-        tip: "遇到无解问题请反馈题目seed"
+        tip: "90万道题均有解，想不出来可以借助求解器！"
     }
 }
 
@@ -366,13 +411,17 @@ function clearProcess(){
 }
 
 game.get_item("#startGame").addEventListener("click", game.to_select_page);
-document.querySelectorAll(".fh").forEach((e)=>{e.addEventListener("click", ()=>window.location.reload())});
+game.get_items(".fh").forEach((e)=>{e.addEventListener("click", ()=>window.location.reload())});
 game.get_item("#x1").addEventListener("click", game.start_game);
 game.get_item("#x2").addEventListener("click", game.start_game_wx);
 game.get_item("#x3").addEventListener("click", game.start_game_seed);
+game.get_item("#x4").addEventListener("click", game.start_game_help);
 game.get_item("#load").addEventListener("click", game.load_process);
 game.get_item("#next").addEventListener("click", game.checkNext);
+game.get_item("#helper").addEventListener("click", game.helper);
 game.get_item("#reset").addEventListener("click", clearProcess);
 
 // inject
 window.game = game;
+window.randomSeed = randomSeed;
+window.Matrix = Matrix;

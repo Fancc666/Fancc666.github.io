@@ -116,4 +116,28 @@ Matrix.inv = (square)=>{
     return result;
 }
 
+Matrix.multiply = (a, b)=>{
+   // 相乘约束
+   if (a[0].length !== b.length) {
+      console.log(a[0].length, b.length);
+      throw new Error();
+   }
+   let m = a.length;
+   let p = a[0].length;
+   let n = b[0].length;
+
+   // 初始化 m*n 全 0 二维数组
+   let c = new Array(m).fill(0).map(arr => new Array(n).fill(0));
+
+   for (let i = 0; i < m; i++) {
+       for (let j = 0; j < n; j++) {
+           for (let k = 0; k < p; k++) {
+               c[i][j] += a[i][k] * b[k][j];
+           }
+       }
+   }
+
+   return c;
+}
+
 export {Matrix};

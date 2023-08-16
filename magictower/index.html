@@ -24,7 +24,7 @@
             <p>你需要慢慢<b class="line">总结规律</b>，摸索诀窍</p>
             <p>多试几次就会了，要有耐心，祝你玩得开心</p>
             <p><span class="line" id="reset">点我重置进度</span></p>
-            <p>最新更新时间2023.8.16 新增无限模式，debug无解bug</p>
+            <p>最新更新时间2023.8.16 新增无限模式和求解器</p>
             <p>By FANCC, 2023.</p>
         </div>
         <button class="at_bottom_up" id="startGame">开始游戏</button>
@@ -33,9 +33,12 @@
     <div class="page select" id="select">
         <p class="fh">返回</p>
         <h2>选关界面</h2>
+        <p>游戏</p>
         <button class="w100 m10" id="x1">传统模式(10关)</button>
         <button class="w100 m10" id="x2">无限模式(随机种子)</button>
+        <p>开发</p>
         <button class="w100 m10" id="x3">seed测试</button>
+        <button class="w100 m10" id="x4">求解器</button>
         <p>*无限模式不支持加载进度</p>
         <p>*随机种子范围100000-999999</p>
         <p>联系反馈:</p>
@@ -66,6 +69,14 @@
         </div>
         <p id="tip">--</p>
         <button class="at_bottom" id="next">下一关</button>
+    </div>
+    <div class="page help" id="help">
+        <p class="fh">返回</p>
+        <h2>求解器</h2>
+        <p>*随机种子范围100000-999999</p>
+        <p>输入随机种子获得解题方法！</p>
+        <button class="w100 m10" id="helper">点我输入</button>
+        <pre id="solve_output"></pre>
     </div>
 </div>
 <script src="./game.js?v5" type="module"></script>

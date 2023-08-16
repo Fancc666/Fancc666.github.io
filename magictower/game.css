@@ -33,6 +33,7 @@ h2{
     padding-top: 10px;
 }
 button{
+    word-break: keep-all;
     background-color: rgb(163, 255, 127);
     padding: 5px 10px;
     font-size: .9em;
@@ -99,5 +100,27 @@ button:active{
     font-size: 1.1em;
 }
 .line{
+    text-decoration: underline;
+}
+.w100{
+    width: 100%;
+}
+.m10{
+    margin: 10px auto !important;
+}
+#gameSeed{
+    display: none;
+    margin: 0;
+    padding: 0;
+    line-height: 0;
+}
+#fh{
+    margin: 0;
+    padding: 0;
+    line-height: 0;
+    position: absolute;
+    top: 2em;
+    font-size: .9em;
+    color: blue;
     text-decoration: underline;
 }

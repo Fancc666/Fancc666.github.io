@@ -7,12 +7,19 @@ import { randomSeed } from "./randomSeed.js";
 import { Matrix } from "./matrix.js";
 import { reporter } from "./reporter.js";
 
+const NORMAL = 0;
+const WX = 1;
+const SEED = 2;
+
 var game = game || {};
 game.item = null;
+game.gameMode = NORMAL;
+game.gameSeed = 0;
 game.colorBars = [];
 game.gameID = 1;
 game.end = false;
 game.debugMode = false;
+game.reporter_switch = true;
 game.get_item = (id)=>{
     // game.item = document.getElementById(id);
     game.item = document.querySelector(id);
@@ -49,21 +56,55 @@ game.change_color = (index)=>{
     game.colorBars[index].classList.add(`color${newColor}`);
 }
 game.initColor = ()=>{
-    for (let i=0;i<game.colorBars.length;i++){
-        for (let j=0;j<4;j++){
-            game.colorBars[i].classList.remove(`color${j}`);
+    if (game.gameMode === NORMAL){
+        for (let i=0;i<game.colorBars.length;i++){
+            for (let j=0;j<4;j++){
+                game.colorBars[i].classList.remove(`color${j}`);
+            }
+        }
+        for (let i=0;i<game.colorBars.length;i++){
+            game.colorBars[i].classList.add(`color${game.data[game.gameID].initColor[i]}`);
+            game.colorBars[i].attributes.color.value = String(game.data[game.gameID].initColor[i]);
         }
     }
-    for (let i=0;i<game.colorBars.length;i++){
-        game.colorBars[i].classList.add(`color${game.data[game.gameID].initColor[i]}`);
-        game.colorBars[i].attributes.color.value = String(game.data[game.gameID].initColor[i]);
+    if (game.gameMode === WX || game.gameMode === SEED){
+        for (let i=0;i<game.colorBars.length;i++){
+            for (let j=0;j<4;j++){
+                game.colorBars[i].classList.remove(`color${j}`);
+            }
+        }
+        for (let i=0;i<game.colorBars.length;i++){
+            game.colorBars[i].classList.add(`color${game.data['WX'].initColor[i]}`);
+            game.colorBars[i].attributes.color.value = String(game.data['WX'].initColor[i]);
+        }
     }
 }
 game.init_all = ()=>{
-    game.get_item("#gameID").innerText = String(game.gameID);
+    game.get_item("#gameTitle").innerText = `第${game.gameID}关`;
+    game.get_item("#gameSeed").style.display = "none";
+    // game.get_item("#gameID").innerText = String(game.gameID);
     game.initColor();
     game.get_item("#tip").innerText = game.data[game.gameID].tip;
     game.rule = game.data[game.gameID].rule;
+}
+game.init_all_wx = ()=>{
+    game.get_item("#gameTitle").innerText = "无限模式";
+    game.get_item("#gameSeed").style.display = "block";
+    game.gameSeed = randomSeed.choose(100000, 999999, Math.random);
+    game.get_item("#gameSeedNum").innerText = String(game.gameSeed);
+    game.generate_wx_game();
+    game.initColor();
+    game.rule = game.data['WX'].rule;
+    game.get_item("#tip").innerText = game.data['WX'].tip;
+}
+game.init_all_seed = ()=>{
+    game.get_item("#gameTitle").innerText = "种子测试";
+    game.get_item("#gameSeed").style.display = "block";
+    game.get_item("#gameSeedNum").innerText = String(game.gameSeed);
+    game.generate_wx_game();
+    game.initColor();
+    game.rule = game.data['WX'].rule;
+    game.get_item("#tip").innerText = game.data['WX'].tip;
 }
 game.checkNext = ()=>{
     let flag = 0;
@@ -79,7 +120,22 @@ game.checkNext = ()=>{
     }
 }
 game.next = ()=>{
+    if (game.gameMode === WX){
+        if (!game.debugMode && game.reporter_switch){
+            reporter.info("magic-tower", `seed complete ${game.gameSeed}`);
+            reporter.report();
+        }
+        game.init_all_wx();
+        return;
+    }
+    if (game.gameMode === SEED){
+        return;
+    }
     if (!game.end){
+        if (!game.debugMode && game.reporter_switch){
+            reporter.info("magic-tower", `level complete ${game.gameID}`);
+            reporter.report();
+        }
         game.gameID += 1;
         if (game.data[game.gameID] === undefined){
             alert("恭喜通关！没有更多关卡了");
@@ -93,14 +149,77 @@ game.next = ()=>{
         }
     }
 }
+game.to_select_page = ()=>{
+    game.hide_page("#welcome");
+    game.hide_page("#game");
+    game.show_page("#select");
+}
 game.start_game = ()=>{
     game.hide_page("#welcome");
+    game.hide_page("#select");
     game.show_page("#game");
     game.get_items(".colorbar").forEach((e)=>{
         game.colorBars.push(e);
         e.addEventListener("click", ()=>{game.click_bar(e.attributes.floor.value)});
     });
     game.init_all();
+}
+game.start_game_wx = ()=>{
+    game.hide_page("#welcome");
+    game.hide_page("#select");
+    game.show_page("#game");
+    game.get_items(".colorbar").forEach((e)=>{
+        game.colorBars.push(e);
+        e.addEventListener("click", ()=>{game.click_bar(e.attributes.floor.value)});
+    });
+    game.gameMode = WX;
+    game.init_all_wx();
+}
+game.start_game_seed = ()=>{
+    let user_input = prompt("请输入随机种子");
+    if (user_input === ""){
+        return;
+    }
+    game.gameSeed = Number(user_input);
+    game.hide_page("#welcome");
+    game.hide_page("#select");
+    game.show_page("#game");
+    game.get_items(".colorbar").forEach((e)=>{
+        game.colorBars.push(e);
+        e.addEventListener("click", ()=>{game.click_bar(e.attributes.floor.value)});
+    });
+    game.gameMode = SEED;
+    game.get_item("#next").style.display = "none";
+    game.init_all_seed();
+}
+game.generate_wx_game = ()=>{
+    let size = 4;
+    randomSeed.seed = game.gameSeed;
+    // console.log(randomSeed.generate());
+    let i_color = [];
+    for (let i=0;i<size;i++){
+        i_color.push(randomSeed.choose(0, 3, randomSeed.generate));
+    }
+    let i_rule = [
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [0, 0, 1, 0],
+        [0, 0, 0, 1]
+    ];
+    let flag = 0;
+    while (!flag){
+        for (let i=0;i<size;i++){
+            for (let j=0;j<size;j++){
+                if (i === j){
+                    continue;
+                }
+                i_rule[i][j] = randomSeed.choose(0, 1, randomSeed.generate);
+            }
+        }
+        flag = Matrix.det(i_rule);
+    }
+    game.data['WX'].initColor = i_color;
+    game.data['WX'].rule = i_rule;
 }
 game.load_process = ()=>{
     if (localStorage.getItem("game_process") === null){
@@ -213,28 +332,38 @@ game.data = {
         ],
         tip: "最后一关！"
     },
+    'WX': {
+        initColor: null,
+        rule: null,
+        tip: "遇到无解问题请反馈题目seed"
+    }
 }
 
 // for debug
-if (game.debugMode){
-    let debugLevel = Math.max(...Object.keys(game.data).map(a=>Number(a)));
-    game.gameID = debugLevel;
-    game.start_game();
-}
+// if (game.debugMode){
+//     let debugLevel = Math.max(...Object.keys(game.data).map(a=>Number(a)));
+//     game.gameID = debugLevel;
+//     game.start_game();
+// }
 game.debugger = (e)=>{
     if (game.debugMode){
         return eval("("+e+")");
     }
 };
 
-window.game = game;
-
 function clearProcess(){
     localStorage.removeItem("game_process");
     window.location.reload();
 }
 
-game.get_item("#startGame").addEventListener("click", game.start_game);
+game.get_item("#startGame").addEventListener("click", game.to_select_page);
+game.get_item("#fh").addEventListener("click", ()=>window.location.reload());
+game.get_item("#x1").addEventListener("click", game.start_game);
+game.get_item("#x2").addEventListener("click", game.start_game_wx);
+game.get_item("#x3").addEventListener("click", game.start_game_seed);
 game.get_item("#load").addEventListener("click", game.load_process);
 game.get_item("#next").addEventListener("click", game.checkNext);
 game.get_item("#reset").addEventListener("click", clearProcess);
+
+// inject
+window.game = game;

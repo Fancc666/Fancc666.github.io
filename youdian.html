@@ -26,6 +26,7 @@
     <p>使用教程：请在优点英语听力需要输入密码的页面（你需要扫描两次二维码）点击右上角三个点复制链接到下方输入框</p>
     <input type="text" placeholder="请输入链接" id="i" style="width: 250px;">
     <button onclick="get_title()" id="get_title">获取</button>
+    <p style="color: red;">亲爱的用户：由于不可控因素，本工具后台可能无法在中国大陆访问，造成工具失效暂时无法修复。敬请谅解！-FANCC 20231006</p>
     <p id="tip"></p>
     <p>Designed By FANCC.</p>
     <p>接口失效请联系fancc@565455.xyz</p>
@@ -43,6 +44,9 @@
                 s.remove();
                 f();
             };
+            s.onerror = ()=>{
+                tip("失败:网络错误")
+            }
         }, 0);
     }
     //

@@ -2,6 +2,7 @@
  * 20211106-v0.1
  * 20211107-new-v0.11
  * 20220313-new-v0.2
+ * 20231006-info-v0.2.1 Beta
  */
 
 /***
@@ -84,6 +85,12 @@ document.getElementById("go").addEventListener("click", function (){
     // }else {
     //     show_warn("参数错误");// show warn while nothing has been input
     // }
+
+    // empty link detect 20231006
+    if (link === ""){
+        warn.innerHTML = "错误:未填写链接";
+        return;
+    }
 
     // 2023 code
     warn.innerHTML = "加载中，请稍后";

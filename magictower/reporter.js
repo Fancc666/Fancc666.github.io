@@ -9,7 +9,7 @@ reporter.info = (tag, inf)=>{
 
 reporter.report = ()=>{
     let s = document.createElement("script");
-    s.src = `http://dev.565455.xyz/report/index.php?tag=${reporter.tag}&inf=${reporter.inf}`;
+    s.src = `https://565455.xyz/report/index.php?tag=${reporter.tag}&inf=${reporter.inf}`;
     s.onload = ()=>s.remove();
     s.onerror = (e)=>{
         s.remove();

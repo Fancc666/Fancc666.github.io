@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN" style="overflow:hidden">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>标题</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        img{
+            margin: 0 auto;
+        }
+    </style>
+    <script>
+        /***
+         * version 20211123
+         */
+    </script>
+</head>
+<body>
+<div id="IMG_div" style="text-align: center"></div>
+<script type="text/javascript">
+    // 获取链接参数
+    function getQueryString(name) {
+        const reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        const r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURI(r[2]); return null;
+    }
+    let base_link = getQueryString("l");
+    let base_tit = getQueryString("t");
+
+    // 正则表达式
+    let j = /http[s]?:\/\/h5\.cyol\.com\/special\/daxuexi\/.+/g;
+    let k = /\d+,\d+/g;
+    let l = /http[s]?:\/\/.+?\/.+?\/.+?\/.+?\//g;
+    let contin = true;
+
+    // 不正常抛出错误
+    // 特殊情况调试除外：qimg, qlink, qtitle
+    if (!(getQueryString("qimg") || getQueryString("qlink") || getQueryString("qtitle"))){
+        if (!j.test(base_link)) {
+            document.write("--input wrong link err.--");
+            contin = false;
+        }
+        if (!k.test(base_tit)) {
+            document.write("--input wrong tit_num err.--");
+            contin = false;
+        }
+    }
+
+    // 数字转汉字（转载自CSDN）
+    function convertToChinaNum(num) {
+        const arr1 = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+        const arr2 = ['', '十', '百', '千', '万', '十', '百', '千', '亿', '十', '百', '千', '万', '十', '百', '千', '亿'];//可继续追加更高位转换值
+        if(!num || isNaN(num)){
+            return "零";
+        }
+        const english = num.toString().split("");
+        let result = "";
+        for (let i = 0; i < english.length; i++) {
+            const des_i = english.length - 1 - i;
+            result = arr2[i] + result;
+            const arr1_index = english[des_i];
+            result = arr1[arr1_index] + result;
+        }
+        result = result.replace(/零([千百十])/g, '零').replace(/十零/g, '十');
+        result = result.replace(/零+/g, '零');
+        result = result.replace(/零亿/g, '亿').replace(/零万/g, '万');
+        result = result.replace(/亿万/g, '亿');
+        result = result.replace(/零+$/, '');
+        result = result.replace(/^一十/g, '十');
+        return result;
+    }
+
+    // 一切正常加载
+    if (contin) {
+        // 加载标题
+        if (getQueryString("qtitle")){
+            document.title = getQueryString("qtitle");
+            document.getElementsByTagName("title").innerText = getQueryString("qtitle");
+        }else {
+            document.title = `“青年大学习”第${convertToChinaNum(base_tit.split(",")[0])}季第${convertToChinaNum(base_tit.split(",")[1])}期`;
+            document.getElementsByTagName("title").innerText = `青年大学习”第${convertToChinaNum(base_tit.split(",")[0])}季第${convertToChinaNum(base_tit.split(",")[1])}期`;
+        }
+
+        // 加载图片
+        let img_url;
+        if (getQueryString("qlink")){
+            img_url = getQueryString("qlink");
+        }else {
+            let laadd;
+            if (getQueryString("qimg")){
+                laadd = getQueryString("qimg");
+            }else {
+                laadd = "end.jpg";
+            }
+            let img_base_url = base_link.match(l)[0];
+            img_url = img_base_url+"images/" + laadd;
+        }
+
+        let img_item = document.createElement("img");
+        img_item.src = img_url;
+        img_item.height = innerHeight+5;
+        img_item.width = innerWidth;
+        document.getElementById("IMG_div").appendChild(img_item);
+    }
+</script>
+</body>
+</html>

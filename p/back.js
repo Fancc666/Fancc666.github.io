@@ -37,18 +37,18 @@ function load_script(url, f){
 const DEFAULT_TITLE = document.getElementById("qtitle").value;
 
 // hide if img loaded error
-let head_img = document.getElementsByClassName("back-img")[0].children[0];
-let warn = document.getElementById("warn");
-function check_img(){
-    if (head_img.naturalWidth === 0){// when img load err its width would be 0
-        head_img.parentElement.classList.add("hide");// hide the img
-    }
-}
+// let head_img = document.getElementsByClassName("back-img")[0].children[0];
+// let warn = document.getElementById("warn");
+// function check_img(){
+//     if (head_img.naturalWidth === 0){// when img load err its width would be 0
+//         head_img.parentElement.classList.add("hide");// hide the img
+//     }
+// }
 
 // check theme and img // we do not use it now.20220313
 // set_theme();// black and white theme for users
 window.onload = function (){
-    check_img();// check img when elements are ready
+    // check_img();// check img when elements are ready
 }
 
 // warn and its mask
@@ -71,11 +71,11 @@ document.getElementById("go").addEventListener("click", function (){
     // let ji = document.getElementById("dji").value;// season
     // let qi = document.getElementById("dqi").value;// episode
     let qtitle = document.getElementById("qtitle").value;// qtitle
-    let use_qtitle = false;
-    if (qtitle !== DEFAULT_TITLE) {
-        // 
-        use_qtitle = true;
-    }
+    let use_qtitle = true;
+    // if (qtitle !== DEFAULT_TITLE) {
+    //     // 
+    //     use_qtitle = true;
+    // }
     // if (link && (qtitle || (ji && qi))){
     //     if (ji && qi){
     //         window.open(`https://fancc666.gitee.io/say/dxx/index.html?t=${ji},${qi}&l=${link}`);
@@ -95,8 +95,9 @@ document.getElementById("go").addEventListener("click", function (){
     // 2023 code
     warn.innerHTML = "加载中，请稍后";
     if (use_qtitle){
-        window.open(`https://fancc666.gitee.io/say/dxx/index.html?l=${link}&qtitle=${qtitle}`);
+        window.open(`./dxx.html?l=${link}&qtitle=${qtitle}`);
     }else{
+        // 已废弃
         load_script(
             url = "https://api.565455.xyz/api/title/?link=" + link,
             f = function(){
